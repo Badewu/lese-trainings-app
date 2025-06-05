@@ -1,3 +1,4 @@
+# === BLITZLESEN MODE: BlitzlesenMode.gd ===
 extends Control
 
 @onready var display_area = $VBoxContainer/DisplayArea
@@ -11,7 +12,8 @@ var current_index: int = 0
 var start_time: float = 0.0
 
 const SYMBOL_SETS = {
-	0: ["A", "B", "C", "D", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Ä", "Ö", "Ü", "ß"],  # Buchstaben
+	0: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 
+		"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],  # Buchstaben
 	1: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],  # Zahlen
 	2: ["BA", "BE", "BI", "BO", "BU", "DA", "DE", "DI", "DO", "DU",
 		"FA", "FE", "FI", "FO", "FU", "GA", "GE", "GI", "GO", "GU"]  # Silben
@@ -30,10 +32,7 @@ func _setup_session():
 	
 	var symbol_set = SYMBOL_SETS[config.symbol_type]
 	for i in config.symbol_count:
-		if config.symbol_type == 2:  # Silben
-			symbols_to_show.append(symbol_set.pick_random())
-		else:
-			symbols_to_show.append(symbol_set.pick_random())
+		symbols_to_show.append(symbol_set.pick_random())
 	
 	# Setup lines
 	_setup_lines(config.line_count, config.line_mode)
@@ -61,7 +60,7 @@ func _setup_lines(count: int, mode: int):
 		line.add_point(Vector2(viewport_size.x - 50, start_y + i * line_spacing))
 		line.width = 2.0
 		line.default_color = Color(0.5, 0.5, 0.5, 0.5)
-		line.z_index = -1
+		line.z_index = -1  # Linien hinter den Symbolen
 		line_container.add_child(line)
 
 func _show_next_symbol():
@@ -72,12 +71,13 @@ func _show_next_symbol():
 	var config = GameManager.current_session
 	var symbol = symbols_to_show[current_index]
 	
-	# Calculate position
+	# Calculate position - zeilenweise von links nach rechts
 	var viewport_size = get_viewport_rect().size
-	var symbols_per_line = max(1, symbols_to_show.size() / config.line_count)
+	var symbols_per_line = ceil(float(symbols_to_show.size()) / float(config.line_count))
 	var line_index = current_index / symbols_per_line
-	var position_in_line = current_index % symbols_per_line
+	var position_in_line = current_index % int(symbols_per_line)
 	
+	# Sicherstellen, dass wir nicht mehr Zeilen nutzen als verfügbar
 	if line_index >= config.line_count:
 		line_index = config.line_count - 1
 		# Verteile übrige Symbole auf die letzte Zeile
@@ -99,8 +99,7 @@ func _show_next_symbol():
 	
 	# Hide after display time
 	await get_tree().create_timer(config.display_time).timeout
-	#label.modulate.a = 0.3  # Keep faint trace
-	label.hide()
+	label.modulate.a = 0.3  # Keep faint trace
 	
 	current_index += 1
 	await get_tree().create_timer(0.2).timeout  # Small pause between symbols

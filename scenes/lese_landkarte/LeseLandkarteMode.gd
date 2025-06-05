@@ -1,3 +1,4 @@
+# === LESE-LANDKARTE MODE: LeseLandkarteMode.gd ===
 extends Control
 
 @onready var display_area = $VBoxContainer/DisplayArea
@@ -14,8 +15,9 @@ var start_time: float = 0.0
 var placed_tokens: Dictionary = {}
 
 const SYMBOL_SETS = {
-	0: ["A", "B", "C", "D", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Ä", "Ö", "Ü", "ß"],  # Buchstaben
-	1: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],  # Zahlen
+	0: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 
+		"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
+	1: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
 	2: ["BA", "BE", "BI", "BO", "BU", "DA", "DE", "DI", "DO", "DU",
 		"FA", "FE", "FI", "FO", "FU", "GA", "GE", "GI", "GO", "GU"]
 }
@@ -33,10 +35,7 @@ func _setup_session():
 	
 	var symbol_set = SYMBOL_SETS[config.symbol_type]
 	for i in config.symbol_count:
-		if config.symbol_type == 2:
-			symbols_to_show.append(symbol_set.pick_random())
-		else:
-			symbols_to_show.append(symbol_set.pick_random())
+		symbols_to_show.append(symbol_set.pick_random())
 	
 	_setup_lines(config.line_count, config.line_mode)
 	
@@ -61,13 +60,12 @@ func _setup_lines(count: int, mode: int):
 		line.add_point(Vector2(viewport_size.x - 50, start_y + i * line_spacing))
 		line.width = 2.0
 		line.default_color = Color(0.5, 0.5, 0.5, 0.5)
-		line.z_index = -1
+		line.z_index = -1  # Linien hinter den Symbolen
 		line_container.add_child(line)
 
 func _show_all_symbols():
 	var config = GameManager.current_session
 	_show_next_symbol_sequential()
-
 
 func _show_next_symbol_sequential():
 	if current_index >= symbols_to_show.size():
@@ -91,8 +89,8 @@ func _show_next_symbol_sequential():
 		var symbols_in_last_line = symbols_to_show.size() - (config.line_count - 1) * symbols_per_line
 		position_in_line = (current_index - (config.line_count - 1) * symbols_per_line)
 	
-	var x = 100 + position_in_line * 150 + randf() * 50
-	var y = (viewport_size.y - (config.line_count - 1) * 100) / 2 + line_index * 100
+	var x = 100 + position_in_line * 150 + randf() * 30  # Nur leichte horizontale Variation
+	var y = (viewport_size.y - (config.line_count - 1) * 100) / 2 + line_index * 100  # Feste Zeilenhöhe
 	
 	var label = Label.new()
 	label.text = str(symbol)
@@ -152,10 +150,7 @@ func _create_draggable_tokens():
 	var extra_count = max(2, symbols_to_show.size() / 3)
 	var symbol_set = SYMBOL_SETS[config.symbol_type]
 	for i in extra_count:
-		if config.symbol_type == 2:
-			shuffled_symbols.append(symbol_set.pick_random())
-		else:
-			shuffled_symbols.append(symbol_set.pick_random())
+		shuffled_symbols.append(symbol_set.pick_random())
 	
 	shuffled_symbols.shuffle()
 	
