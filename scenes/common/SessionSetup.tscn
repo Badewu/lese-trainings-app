@@ -1,0 +1,90 @@
+[gd_scene load_steps=2 format=3 uid="uid://wjsj1nc23bml"]
+
+[ext_resource type="Script" uid="uid://drdrquklp0tid" path="res://scenes/common/SessionSetup.gd" id="1_tgwao"]
+
+[node name="SessionSetup" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tgwao")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ModeLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Symboltype" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Symboltyp: "
+
+[node name="SymbolTypeOption" type="OptionButton" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="LineCount" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Anzahl an Zeilen: "
+
+[node name="LineCountSlider" type="HSlider" parent="VBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 3.0
+value = 1.0
+
+[node name="SymbolCount" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Anzahl an Symbolen: "
+
+[node name="SymbolCountSlider" type="HSlider" parent="VBoxContainer"]
+layout_mode = 2
+min_value = 2.0
+max_value = 12.0
+value = 2.0
+
+[node name="DisplayTime" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Anzeigedauer (Sek): "
+
+[node name="DisplayTimeSlider" type="HSlider" parent="VBoxContainer"]
+layout_mode = 2
+min_value = 0.5
+max_value = 3.0
+step = 0.1
+value = 0.5
+
+[node name="LineMode" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Linienmodus: "
+
+[node name="LineModeOption" type="OptionButton" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Repetitions" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Wiederholungen: "
+
+[node name="RepetitionsSlider" type="HSlider" parent="VBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+
+[node name="StartButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Start"
+
+[connection signal="value_changed" from="VBoxContainer/LineCountSlider" to="." method="_on_line_count_slider_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/SymbolCountSlider" to="." method="_on_symbol_count_slider_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/DisplayTimeSlider" to="." method="_on_display_time_slider_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/RepetitionsSlider" to="." method="_on_repetitions_slider_value_changed"]

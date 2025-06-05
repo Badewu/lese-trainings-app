@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbh7f4vlr72yl"]
+
+[ext_resource type="Script" uid="uid://bi2r6xe01oixu" path="res://scenes/main_menu/MainMenu.gd" id="1_isws5"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_isws5")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Lese-Trainer"
+
+[node name="ModesContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="BlitzlesenButton" type="Button" parent="VBoxContainer/ModesContainer"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+text = "Blitzlesen"
+
+[node name="LandkarteButton" type="Button" parent="VBoxContainer/ModesContainer"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+text = "Lese-Landkarte"
