@@ -79,9 +79,9 @@ func _show_next_symbol_sequential():
 	var viewport_size = get_viewport_rect().size
 	
 	# Calculate position - zeilenweise von links nach rechts
-	var symbols_per_line = ceil(float(symbols_to_show.size()) / float(config.line_count))
-	var line_index = current_index / symbols_per_line
-	var position_in_line = current_index % int(symbols_per_line)
+	var symbols_per_line = int(ceil(float(symbols_to_show.size()) / float(config.line_count)))
+	var line_index = int(current_index / symbols_per_line)
+	var position_in_line = current_index % symbols_per_line
 	
 	# Sicherstellen, dass wir nicht mehr Zeilen nutzen als verfügbar
 	if line_index >= config.line_count:
@@ -90,7 +90,8 @@ func _show_next_symbol_sequential():
 		position_in_line = (current_index - (config.line_count - 1) * symbols_per_line)
 	
 	var x = 100 + position_in_line * 150 + randf() * 30  # Nur leichte horizontale Variation
-	var y = (viewport_size.y - (config.line_count - 1) * 100) / 2 + line_index * 100  # Feste Zeilenhöhe
+	var base_y = (viewport_size.y - (config.line_count - 1) * 100) / 2 + line_index * 100
+	var y = base_y + (randf() - 0.5) * 10  # Leichte vertikale Variation (±5 Pixel)
 	
 	var label = Label.new()
 	label.text = str(symbol)
